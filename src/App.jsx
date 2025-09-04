@@ -1,13 +1,13 @@
 import React from 'react'
-import useCryptoHistory from './hooks/useCryptoHistory'
+import CryptoTable from './components/crypto/cryptoTable/CryptoTable'
+
 
 
 const App = () => {
- let {data}=useCryptoHistory()
- console.log(data)
+
   return (
     <div>
-      
+      <CryptoTable/>
     </div>
   )
 }
