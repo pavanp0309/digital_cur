@@ -2,6 +2,8 @@ import React from 'react'
 import { Table } from "antd";
 import millify from "millify";
 import useCryptoCoins from '../../../hooks/useCryptoCoins';
+import useCryptoHistory from '../../../hooks/useCryptoHistory';
+import LineCharts from '../../../graphs/LineChart';
 
 const CryptoTable = () => {
   let {coins,isLoading,isError}=useCryptoCoins()
@@ -64,14 +66,29 @@ const CryptoTable = () => {
       ),
     },
     {
-      key:"graph",
+      key:"uuid",
       title: 'Graph',
-      dataIndex:"graph",
+      dataIndex:"uuid",
       responsive:["xs","sm","md","lg","xl","xxl"],
       align:"center",
-      render: (text,record) => (<></>),
+      render: (coinId) => <History data={coinId}/>,
     },
   ]
+
+  // Historical data of each coin
+  let History=({data})=>{
+      let {history,isLoading,isError}=useCryptoHistory(data)
+      if(isLoading){
+        return <h6>loading...</h6>
+      }
+      if(isError){
+        return <h6>error..</h6>
+      }
+    return <LineCharts  data={history}/>
+  }
+
+
+
   return (
     <div className='container-fluid'>
         <Table dataSource={coins} bordered  columns={columns} key={coins.uuid} loading={isLoading}/>
