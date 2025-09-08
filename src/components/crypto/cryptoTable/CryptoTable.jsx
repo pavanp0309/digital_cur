@@ -91,7 +91,14 @@ const CryptoTable = () => {
 
   return (
     <div className='container-fluid'>
-        <Table dataSource={coins} bordered  columns={columns} key={coins.uuid} loading={isLoading}/>
+       <Table 
+  dataSource={coins} 
+  bordered  
+  columns={columns} 
+  rowKey="uuid" 
+  loading={isLoading}
+/>
+
     </div>
     )
 }

@@ -1,6 +1,5 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-
 import {
   CategoryScale,
   Chart,
@@ -11,10 +10,9 @@ import {
   Title,
   Legend,
   Tooltip,
-  scales,
 } from "chart.js";
 
-Chart.register([
+Chart.register(
   CategoryScale,
   LineController,
   LineElement,
@@ -22,58 +20,49 @@ Chart.register([
   PointElement,
   Title,
   Legend,
-  Tooltip,
-]);
+  Tooltip
+);
 
 const LineCharts = ({ data }) => {
-  console.log("chart", data);
+  if (!data || data.length === 0) return <p>No data</p>;
 
   const firstPrice = parseFloat(data[0].price);
   const lastPrice = parseFloat(data[data.length - 1].price);
+
   const trendColor =
-    lastPrice > firstPrice
-      ? "green"
-      : lastPrice < firstPrice
-      ? "red"
-      : "orange";
+    lastPrice > firstPrice ? "green" : lastPrice < firstPrice ? "red" : "orange";
 
   const chartdata = {
     labels: data.map((ele) =>
-      new Date(ele.timestamp * 1000).toLocaleTimeString()
+      new Date(ele.timestamp * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     ),
     datasets: [
       {
-        label: "price",
+        label: "Price",
         data: data.map((ele) => parseFloat(ele.price)),
-        fill: false,
         borderColor: trendColor,
         backgroundColor: trendColor,
         tension: 0.4,
         borderWidth: 2,
-        pointRadius:0
+        pointRadius: 0,
       },
     ],
   };
 
-const options = {
+  const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: false
-      },
+      legend: { display: false },
     },
     scales: {
-      x: {
-        display: false
-      },
-      y: {
-        display: false
-      }
-    }
+      x: { display: false },
+      y: { display: false },
+    },
   };
 
   return (
-    <div style={{ width: "100%", height: "20px" }}>
+    <div style={{ width: "100px", height: "30px" }}>
       <Line data={chartdata} options={options} />
     </div>
   );
