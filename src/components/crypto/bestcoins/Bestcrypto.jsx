@@ -3,7 +3,7 @@ import useCryptoStats from '../../../hooks/useCryptoStats' //hook call
 import AreaGraph from '../../../graphs/AreaGraph'
 
 const Bestcrypto = () => {
-    const {bestCoins,isLoading,isError}=useCryptoStats()
+    const {bestCoins,newestCoins,isLoading,isError}=useCryptoStats()
     console.log(bestCoins)
     if(isLoading){
         return <h6>loading..</h6>
