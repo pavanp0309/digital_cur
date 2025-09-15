@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useCryptoCoins from '../../../hooks/useCryptoCoins'
 import useCryptoHistory from '../../../hooks/useCryptoHistory'
+import LineBarGraph from '../../../graphs/LineBarGraph'
 
 let timePeriods=["3h", "24h"," 7d" ,"30d" ,"3m", "1y" ,"3y" ,"5y"]
 const FilterCard = () => {
@@ -41,17 +42,18 @@ const FilterCard = () => {
     // functions to handle the timePeriod and selectedtabs 
     let handleTabkey=(key)=>setSelectedTab(key)
     let handleTimePeriod=(e)=>setTimePeriod(e.target.value)
-    let selectedCoin=()=>filteredCoins.find((coin)=>coin.uuid==selectedTab)
+    let selectedCoin=filteredCoins.find((coin)=>coin.uuid==selectedTab)
+    console.log(selectedCoin)
     // let ar=["BTC","ETH","XRP","USDT","BNB"]
     // console.log(ar.find(coin=>coin=="ETH"))//ETH
 
 
 
   return (
-    <div className='card'>
+    <div className='card mx-2 my-2'>
         {/* card_header start */}
         {/*loading start*/}
-        <div className="card-header">
+        <div className='p-2 border-bottom mb-2'>
             {isloading?
             // loading part
             (<>
@@ -60,21 +62,43 @@ const FilterCard = () => {
              </div>
 
             </>):
-            // actual coins
-            (<>
+            // actual selceted coin
+            (<div className='d-flex justify-content-between'>
             {
                 selectedCoin?(
-                <>
+                <div>
+                <img src={selectedCoin.iconUrl} className='mx-1' alt=""  width={"30px"} height={'30px'} style={{borderRadius:"100%"}}/>
                 <span className='text-danger'>{selectedCoin.symbol}</span>
-                </>)
+                </div>)
                 :(<h6>select the coin</h6>)
             }
-            
-            </>)}
+
+            {/* Timeperiods */}
+            <select name="" id="" className='form-select w-25' value={timePeriod} onChange={handleTimePeriod}>
+            {timePeriods.map(ele=><option className='' key={ele} value={ele}>{ele}</option>)}
+            </select>
+            </div>)}
         </div>
         {/* card_header end */}
+        {/* Tabs for Coins */}
+        <ul className='nav nav-tabs'>
+          {
+            filteredCoins.map((scoin)=>(
+              <li class="nav-item">
+                <button className='btn btn-success mx-1 mb-1'
+                onClick={()=>handleTabkey(scoin.uuid)}
+                >
+                   {scoin.symbol}
+                </button>
+              </li>
+            ))
+          }
+        </ul>
 
         {/* card_body_start */}
+        <div>
+          <LineBarGraph history={history}/>
+        </div>
         {/* card_body_end */}
       
     </div>
