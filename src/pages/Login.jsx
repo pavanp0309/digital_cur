@@ -1,0 +1,41 @@
+
+import { Button, Input, Form, message, Modal } from "antd";
+
+const Login = () => {
+  
+
+ 
+  return (
+    <div className="container mt-5" style={{ maxWidth: 400 }}>
+      <h2>Login</h2>
+      <Form layout="vertical" onFinish={''}>
+        <Form.Item label="Email" name="email" rules={[{ required: true, type: "email" }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="Password" name="password" rules={[{ required: true, min: 6 }]}>
+          <Input.Password />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block loading={loading}>
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+
+      <Button onClick={''} block type="default">
+        Login with Google
+      </Button>
+
+      <div className="mt-3">
+        <p>
+          Don't have an account? <Link to="/register">Register</Link>
+        </p>
+        <p>
+          <Link to="/forgot-password">Forgot Password?</Link>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
