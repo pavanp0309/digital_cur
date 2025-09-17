@@ -1,10 +1,59 @@
 
 import { Button, Input, Form, message, Modal } from "antd";
+import { useGoogleLoginMutation,useLoginUserMutation } from "../store/authReducers/authApi";
+import { Link,useNavigate } from "react-router-dom";
+
 
 const Login = () => {
-  
+  let [googleLogin]=useGoogleLoginMutation()
+  let [loginUser]=useLoginUserMutation()
+  let navigate=useNavigate()
 
- 
+ let handleGoogleLogin=async()=>{
+  //  alert("login with google")
+  try {
+    let res=await googleLogin().unwrap()
+    console.log(res)//{data:{user:{},iseNewUser}}
+    // data.user data.isNewUser
+    const {user,isNewUser}=res.data
+    alert(`welcome user${user.userName}`)
+    // only for the newUsers
+    if(isNewUser){
+      Modal.info({
+       title :"newUser detected",
+       content:"please select an account",
+       onOk:()=>navigate("/register",{
+         state:{
+          name:user.displayName || "",
+          email:user.email || "" ,
+          photoUrl:user.photoURL|| ""
+         }
+       })
+
+      })
+    }else{
+      navigate("/dashboard")
+    }
+
+
+  } catch (error) {
+    
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+ }
+
   return (
     <div className="container mt-5" style={{ maxWidth: 400 }}>
       <h2>Login</h2>
@@ -16,13 +65,13 @@ const Login = () => {
           <Input.Password />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" block loading={loading}>
+          <Button type="primary" htmlType="submit" block loading={''}>
             Login
           </Button>
         </Form.Item>
       </Form>
 
-      <Button onClick={''} block type="default">
+      <Button onClick={handleGoogleLogin} block type="default">
         Login with Google
       </Button>
 

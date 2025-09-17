@@ -1,14 +1,11 @@
 import React from 'react'
-// import CryptoTable from './components/crypto/cryptoTable/CryptoTable'
-// import GlobalStats from './components/crypto/stats/GlobalStats'
-// import Bestcrypto from './components/crypto/bestcoins/Bestcrypto'
-// import FilterCard from './components/crypto/cards/FilterCard'
+import Approutes from './routes/Approutes'
 
 const App = () => {
 
   return (
     <div>
-     
+     <Approutes/>
     </div>
   )
 }
