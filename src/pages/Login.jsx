@@ -2,12 +2,28 @@
 import { Button, Input, Form, message, Modal } from "antd";
 import { useGoogleLoginMutation,useLoginUserMutation } from "../store/authReducers/authApi";
 import { Link,useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 
 const Login = () => {
   let [googleLogin]=useGoogleLoginMutation()
   let [loginUser]=useLoginUserMutation()
+  let [loading,setLoading]=useState(false)
   let navigate=useNavigate()
+
+
+  const handleSubmit = async ({ email, password }) => {
+    try {
+      setLoading(true);
+      const res = await loginUser({ email, password }).unwrap();
+      message.success(`Welcome back, ${res.displayName || "User"}`);
+      navigate("/dashboard");
+    } catch (err) {
+      message.error(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 const handleGoogleLogin = async () => {
     try {
@@ -38,7 +54,7 @@ const handleGoogleLogin = async () => {
   return (
     <div className="container mt-5" style={{ maxWidth: 400 }}>
       <h2>Login</h2>
-      <Form layout="vertical" onFinish={''}>
+      <Form layout="vertical" onFinish={handleSubmit}>
         <Form.Item label="Email" name="email" rules={[{ required: true, type: "email" }]}>
           <Input />
         </Form.Item>
