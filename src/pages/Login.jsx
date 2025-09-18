@@ -9,50 +9,31 @@ const Login = () => {
   let [loginUser]=useLoginUserMutation()
   let navigate=useNavigate()
 
- let handleGoogleLogin=async()=>{
-  //  alert("login with google")
-  try {
-    let res=await googleLogin().unwrap()
-    console.log(res)//{data:{user:{},iseNewUser}}
-    // data.user data.isNewUser
-    const {user,isNewUser}=res.data
-    alert(`welcome user${user.userName}`)
-    // only for the newUsers
-    if(isNewUser){
-      Modal.info({
-       title :"newUser detected",
-       content:"please select an account",
-       onOk:()=>navigate("/register",{
-         state:{
-          name:user.displayName || "",
-          email:user.email || "" ,
-          photoUrl:user.photoURL|| ""
-         }
-       })
-
-      })
-    }else{
-      navigate("/dashboard")
+const handleGoogleLogin = async () => {
+    try {
+      const res = await googleLogin().unwrap();
+      const { user, isNewUser } = res;
+      message.success(`Welcome ${user.displayName || "User"}`);
+      if (isNewUser) {
+        Modal.info({
+          title: "New User Detected",
+          content: "Please complete your registration profile.",
+          onOk: () => navigate("/register", {
+            state: {
+              name: user.displayName || "",
+              email: user.email || "",
+              photoURL: user.photoURL || "",
+            },
+          }),
+        });
+      } else {
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      message.error(err.message || "Google login failed");
     }
+  };
 
-
-  } catch (error) {
-    
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
- }
 
   return (
     <div className="container mt-5" style={{ maxWidth: 400 }}>

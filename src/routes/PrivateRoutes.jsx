@@ -1,17 +1,22 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
-import { Spin } from 'antd'
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { Spin } from "antd";
 
-const PrivateRoutes = ({children}) => {
-  console.log(children)
-  const {user,loading}=useSelector((state)=>state.auth)
-  if(loading) return <Spin/>
- 
-  if(!user)return <Navigate to="/login" replace/>
+const ProtectedRoute = ({children }) => {
+  const { user, loading } = useSelector((state) => state.auth);
 
-//  if user exists navigate to dashbaord else navigate logi page
-  return user ?children:<Navigate to="/login" replace/>
-}
+  if (loading) {
+    // While loading, render a placeholder or spinner
+    return <div><Spin/></div>;
+  }
 
-export default PrivateRoutes
+  // if not logged not 
+  if(!user){
+    return <Navigate to={'/login'} replace/>
+  }
+
+  // Once loaded, redirect if no user
+  return user ? children : <Navigate to="/login" replace />;
+};
+
+export default ProtectedRoute;

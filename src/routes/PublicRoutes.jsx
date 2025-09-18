@@ -1,14 +1,13 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
-import { Spin } from 'antd'
+// src/routes/PublicRoute.jsx
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
-const PublicRoutes = ({children}) => {
-  console.log(children)
-  const {user,loading}=useSelector((state)=>state.auth)
-  if(loading) return <Spin/>
-//  if user exists navigate to dashbaord else navigate logi page
-  return user ?<Navigate to="/dashboard" replace/>:children
-}
+const PublicRoute = ({ children }) => {
+  const { user, loading } = useSelector((state) => state.auth);
 
-export default PublicRoutes
+  if (loading) return null; // or a spinner
+
+  return user ? <Navigate to="/dashboard" replace /> : children;
+};
+
+export default PublicRoute;
