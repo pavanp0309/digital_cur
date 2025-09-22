@@ -1,21 +1,15 @@
+
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { Spin } from "antd";
 
-const ProtectedRoute = ({children }) => {
+const ProtectedRoute = ({ children }) => {
   const { user, loading } = useSelector((state) => state.auth);
 
   if (loading) {
-    // While loading, render a placeholder or spinner
-    return <div><Spin/></div>;
+    return <Spin size="large" style={{ display: "block", margin: "20% auto" }} />;
   }
 
-  // if not logged not 
-  if(!user){
-    return <Navigate to={'/login'} replace/>
-  }
-
-  // Once loaded, redirect if no user
   return user ? children : <Navigate to="/login" replace />;
 };
 

@@ -1,43 +1,51 @@
-import React, { Suspense } from 'react'
-import {Routes,Route} from "react-router-dom"
-let Home=React.lazy(()=>import("../pages/Home"))
-let About=React.lazy(()=>import("../pages/About"))
-let Contact=React.lazy(()=>import("../pages/Contact"))
-let PageNotFound=React.lazy(()=>import("../pages/PageNotfound"))
-let Login=React.lazy(()=>import("../pages/Login"))
-let Register=React.lazy(()=>import("../pages/Register"))
-let Unauthorized=React.lazy(()=>import("../pages/UnAuthorized"))
-let ForgotPassword=React.lazy(()=>import("../pages/ForgotPassword"))
-let Dashboard=React.lazy(()=>import("../pages/Dashboard"))
-// let PrivateRoutes=React.lazy(()=>import("./PrivateRoutes"))
-import PrivateRoutes from './PrivateRoutes'
-let PublicRoutes=React.lazy(()=>import("./PublicRoutes"))
+import React, { Suspense } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-const Approutes = () => {
+// Lazy imports
+const Home = React.lazy(() => import("../pages/Home"));
+const About = React.lazy(() => import("../pages/About"));
+const Contact = React.lazy(() => import("../pages/Contact"));
+const PageNotFound = React.lazy(() => import("../pages/PageNotFound"));
+const Login = React.lazy(() => import("../pages/Login"));
+const Register = React.lazy(() => import("../pages/Register"));
+const Unauthorized = React.lazy(() => import("../pages/UnAuthorized"));
+const ForgotPassword = React.lazy(() => import("../pages/ForgotPassword"));
+const Dashboard = React.lazy(() => import("../pages/Dashboard"));
+
+// Auth utilities
+import PrivateRoutes from "./PrivateRoutes";
+import PublicRoutes from "./PublicRoutes";
+import AuthListener from "../store/authReducers/AuthListner";
+
+const AppRoutes = () => {
   return (
     <>
-  <Suspense fallback={<h6>loading...</h6>}>
+      {/* Firebase Auth state listener */}
+      <AuthListener />
+
+      <Suspense fallback={<h6 style={{ textAlign: "center" }}>Loading...</h6>}>
         <Routes>
-        {/* publicRoutes :where everyone can access */}
-        
-        <Route path="/" element={<Home/>}/>
-        <Route path="/about" element={<About/>}/>
-        <Route path="/contact" element={<Contact/>}/>
-        <Route path="/login" element={<PublicRoutes><Login/></PublicRoutes>}/>
-        <Route path="/register" element={<PublicRoutes><Register/></PublicRoutes>}/>
-        <Route path="/forgot-password" element={<PublicRoutes><ForgotPassword/></PublicRoutes>}/>
+          {/* Public Routes (accessible to everyone) */}
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
 
-        {/* Private Routes: only logged in users can access */}
-        <Route path="/dashboard" element={<PrivateRoutes><Dashboard/></PrivateRoutes>}/>
-       
-        
-        {/* universal Route accessibale to everyone by default */}
-        <Route path="*" element={<PageNotFound/>}/>
-    </Routes>
-  </Suspense>
-      
+          <Route path="/login" element={<PublicRoutes><Login /></PublicRoutes>}/>
+          <Route path="/register" element={   <PublicRoutes>     <Register />   </PublicRoutes>}/>
+          <Route  path="/forgot-password"  element={    <PublicRoutes>      <ForgotPassword />    </PublicRoutes>  }/>
+
+          {/* Private Routes (authenticated users only) */}
+          <Route  path="/dashboard/*"  element={    <PrivateRoutes>      <Dashboard />    </PrivateRoutes>  }/>
+
+          {/* Special Routes */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
+
+          {/* Catch-All (fallback) */}
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Suspense>
     </>
-  )
-}
+  );
+};
 
-export default Approutes
+export default AppRoutes;
