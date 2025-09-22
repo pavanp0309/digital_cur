@@ -17,7 +17,7 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await loginUser({ email, password }).unwrap();
-      // ✅ store only plain data
+      //  store only plain data
       dispatch(setUser({
         uid: res.uid,
         email: res.email,
